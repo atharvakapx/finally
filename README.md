@@ -20,43 +20,41 @@ Single Docker container serving everything on port 8000:
 - **Frontend**: Next.js (static export) with TypeScript and Tailwind CSS
 - **Backend**: FastAPI (Python/uv) with SSE streaming
 - **Database**: SQLite with lazy initialization
-- **AI**: LiteLLM → OpenRouter (Cerebras inference) with structured outputs
+- **AI**: LiteLLM → OpenAI GPT models with structured outputs
 - **Market data**: Built-in GBM simulator (default) or Massive API (optional)
 
 ## Quick Start
 
-```bash
-# Clone and configure
-cp .env.example .env
-# Add your OPENROUTER_API_KEY to .env
+    # Clone and configure
+    cp .env.example .env
 
-# Run with Docker
-docker build -t finally .
-docker run -v finally-data:/app/db -p 8000:8000 --env-file .env finally
+    # Add your OPENAI_API_KEY to .env
 
-# Open http://localhost:8000
-```
+    # Run with Docker
+    docker build -t finally .
+
+    docker run -v finally-data:/app/db -p 8000:8000 --env-file .env finally
+
+    # Open http://localhost:8000
 
 ## Environment Variables
 
 | Variable | Required | Description |
 |---|---|---|
-| `OPENROUTER_API_KEY` | Yes | OpenRouter API key for AI chat |
+| `OPENAI_API_KEY` | Yes | OpenAI API key for AI chat |
 | `MASSIVE_API_KEY` | No | Massive (Polygon.io) key for real market data; omit to use simulator |
 | `LLM_MOCK` | No | Set `true` for deterministic mock LLM responses (testing) |
 
 ## Project Structure
 
-```
-finally/
-├── frontend/    # Next.js static export
-├── backend/     # FastAPI uv project
-├── planning/    # Project documentation and agent contracts
-├── test/        # Playwright E2E tests
-├── db/          # SQLite volume mount (runtime)
-└── scripts/     # Start/stop helpers
-```
+    finally/
+    ├── frontend/    # Next.js static export
+    ├── backend/     # FastAPI uv project
+    ├── planning/    # Project documentation and agent contracts
+    ├── test/        # Playwright E2E tests
+    ├── db/          # SQLite volume mount (runtime)
+    └── scripts/     # Start/stop helpers
 
 ## License
 
-See [LICENSE](LICENSE).
+See LICENSE.
