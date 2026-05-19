@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import time
 from collections.abc import AsyncGenerator
 
 from fastapi import APIRouter, Request
@@ -13,6 +14,8 @@ from fastapi.responses import StreamingResponse
 from .cache import PriceCache
 
 logger = logging.getLogger(__name__)
+
+HEARTBEAT_INTERVAL = 15.0  # seconds between keep-alive comments
 
 router = APIRouter(prefix="/api/stream", tags=["streaming"])
 
@@ -62,6 +65,7 @@ async def _generate_events(
     yield "retry: 1000\n\n"
 
     last_version = -1
+    last_event_time = time.monotonic()
     client_ip = request.client.host if request.client else "unknown"
     logger.info("SSE client connected: %s", client_ip)
 
@@ -73,6 +77,8 @@ async def _generate_events(
                 break
 
             current_version = price_cache.version
+            now = time.monotonic()
+
             if current_version != last_version:
                 last_version = current_version
                 prices = price_cache.get_all()
@@ -81,6 +87,11 @@ async def _generate_events(
                     data = {ticker: update.to_dict() for ticker, update in prices.items()}
                     payload = json.dumps(data)
                     yield f"data: {payload}\n\n"
+                    last_event_time = now
+            elif now - last_event_time >= HEARTBEAT_INTERVAL:
+                # No price changes for 15s — prevent proxy/browser from closing connection
+                yield ": keep-alive\n\n"
+                last_event_time = now
 
             await asyncio.sleep(interval)
     except asyncio.CancelledError:
