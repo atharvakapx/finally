@@ -17,14 +17,21 @@ logger = logging.getLogger(__name__)
 
 HEARTBEAT_INTERVAL = 15.0  # seconds between keep-alive comments
 
-router = APIRouter(prefix="/api/stream", tags=["streaming"])
-
-
-def create_stream_router(price_cache: PriceCache) -> APIRouter:
+def create_stream_router(
+    price_cache: PriceCache,
+    heartbeat_interval: float = HEARTBEAT_INTERVAL,
+) -> APIRouter:
     """Create the SSE streaming router with a reference to the price cache.
 
     This factory pattern lets us inject the PriceCache without globals.
+    Each call returns a fresh router so the function is idempotent and testable.
+
+    Args:
+        price_cache: The shared price cache to stream from.
+        heartbeat_interval: Seconds between keep-alive comments (default 15s).
+            Pass a short value in tests to avoid waiting 15 seconds.
     """
+    router = APIRouter(prefix="/api/stream", tags=["streaming"])
 
     @router.get("/prices")
     async def stream_prices(request: Request) -> StreamingResponse:
@@ -39,7 +46,7 @@ def create_stream_router(price_cache: PriceCache) -> APIRouter:
         disconnection (EventSource built-in behavior).
         """
         return StreamingResponse(
-            _generate_events(price_cache, request),
+            _generate_events(price_cache, request, heartbeat_interval=heartbeat_interval),
             media_type="text/event-stream",
             headers={
                 "Cache-Control": "no-cache",
@@ -55,6 +62,7 @@ async def _generate_events(
     price_cache: PriceCache,
     request: Request,
     interval: float = 0.5,
+    heartbeat_interval: float = HEARTBEAT_INTERVAL,
 ) -> AsyncGenerator[str, None]:
     """Async generator that yields SSE-formatted price events.
 
@@ -88,7 +96,7 @@ async def _generate_events(
                     payload = json.dumps(data)
                     yield f"data: {payload}\n\n"
                     last_event_time = now
-            elif now - last_event_time >= HEARTBEAT_INTERVAL:
+            elif now - last_event_time >= heartbeat_interval:
                 # No price changes for 15s — prevent proxy/browser from closing connection
                 yield ": keep-alive\n\n"
                 last_event_time = now
