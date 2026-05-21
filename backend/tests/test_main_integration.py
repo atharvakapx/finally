@@ -38,22 +38,17 @@ class TestPhase1Integration:
         assert response.status_code == 200
         assert response.json() == {"status": "ok"}
 
-    def test_portfolio_stubs_return_501(self, app_client) -> None:
-        """Portfolio endpoints return 501 not_implemented in Phase 1."""
+    def test_portfolio_history_stub_returns_501(self, app_client) -> None:
+        """GET /api/portfolio/history still returns 501 until plan 02-03 implements it.
+
+        GET /api/portfolio and POST /api/portfolio/trade are now implemented
+        (plan 02-01) and return 200; this test was updated accordingly.
+        """
         client, _ = app_client
-        for method, path, body in [
-            ("GET", "/api/portfolio", None),
-            ("POST", "/api/portfolio/trade", {}),
-            ("GET", "/api/portfolio/history", None),
-        ]:
-            if method == "GET":
-                resp = client.get(path)
-            else:
-                resp = client.post(path, json=body)
-            assert resp.status_code == 501, f"{method} {path} returned {resp.status_code}"
-            data = resp.json()
-            assert data["error"] == "not_implemented", data
-            assert data["message"] == "Coming in Phase 2", data
+        resp = client.get("/api/portfolio/history")
+        assert resp.status_code == 501, f"GET /api/portfolio/history returned {resp.status_code}"
+        data = resp.json()
+        assert data["error"] == "not_implemented", data
 
     def test_watchlist_stubs_return_501(self, app_client) -> None:
         """Watchlist endpoints return 501 not_implemented in Phase 1."""
