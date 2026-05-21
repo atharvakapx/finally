@@ -1,4 +1,22 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(find / -name \"uv\" -type f)",
+      "Read(//home/agent/.local/bin/**)",
+      "Read(//usr/local/bin/**)",
+      "Bash(uv sync *)",
+      "Read(//home/agent/.cargo/bin/**)",
+      "Read(//home/agent/.local/**)",
+      "Bash(pip install *)",
+      "Bash(ls *)",
+      "Bash(export *)",
+      "Bash(/home/agent/.local/bin/uv *)",
+      "Bash(npm install *)",
+      "Bash(pkill -f \"uvicorn app.main\")",
+      "Bash(pkill -9 -f \"uvicorn\")"
+    ]
+  },
   "enabledPlugins": {
     "context7@claude-plugins-official": true
   },

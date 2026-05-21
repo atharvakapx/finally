@@ -7,6 +7,7 @@ import json
 import logging
 import time
 from collections.abc import AsyncGenerator
+from typing import Protocol
 
 from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
@@ -20,8 +21,22 @@ HEARTBEAT_INTERVAL = 15.0  # seconds between keep-alive comments
 router = APIRouter(prefix="/api/stream", tags=["streaming"])
 
 
-def create_stream_router(price_cache: PriceCache) -> APIRouter:
+class ClientTracker(Protocol):
+    """Optional callback interface for tracking active SSE clients."""
+
+    def increment(self) -> int: ...
+    def decrement(self) -> int: ...
+
+
+def create_stream_router(
+    price_cache: PriceCache,
+    client_tracker: ClientTracker | None = None,
+) -> APIRouter:
     """Create the SSE streaming router with a reference to the price cache.
+
+    The optional `client_tracker` is incremented when a client connects and
+    decremented on disconnect; downstream code (e.g. the portfolio snapshot
+    task) can use it to decide whether to do work.
 
     This factory pattern lets us inject the PriceCache without globals.
     """
@@ -39,7 +54,7 @@ def create_stream_router(price_cache: PriceCache) -> APIRouter:
         disconnection (EventSource built-in behavior).
         """
         return StreamingResponse(
-            _generate_events(price_cache, request),
+            _generate_events(price_cache, request, client_tracker=client_tracker),
             media_type="text/event-stream",
             headers={
                 "Cache-Control": "no-cache",
@@ -55,6 +70,7 @@ async def _generate_events(
     price_cache: PriceCache,
     request: Request,
     interval: float = 0.5,
+    client_tracker: ClientTracker | None = None,
 ) -> AsyncGenerator[str, None]:
     """Async generator that yields SSE-formatted price events.
 
@@ -68,6 +84,9 @@ async def _generate_events(
     last_event_time = time.monotonic()
     client_ip = request.client.host if request.client else "unknown"
     logger.info("SSE client connected: %s", client_ip)
+
+    if client_tracker is not None:
+        client_tracker.increment()
 
     try:
         while True:
@@ -96,3 +115,9 @@ async def _generate_events(
             await asyncio.sleep(interval)
     except asyncio.CancelledError:
         logger.info("SSE stream cancelled for: %s", client_ip)
+    finally:
+        if client_tracker is not None:
+            client_tracker.decrement()
+
+
+__all__ = ["create_stream_router", "ClientTracker"]
