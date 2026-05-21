@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
@@ -65,4 +67,7 @@ app.include_router(create_chat_router(price_cache), prefix="/api")
 app.include_router(create_stream_router(price_cache))
 
 # StaticFiles mount LAST — catch-all for frontend assets; /api/* routes take priority
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
+# STATIC_DIR env var is set in the Dockerfile; falls back to a local dev path
+STATIC_DIR = os.environ.get("STATIC_DIR", str(Path(__file__).parent.parent / "static"))
+if Path(STATIC_DIR).exists():
+    app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")
