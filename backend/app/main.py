@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from contextlib import asynccontextmanager
 
@@ -15,6 +16,7 @@ from app.routers import health
 from app.routers.portfolio import create_portfolio_router
 from app.routers.watchlist import create_watchlist_router
 from app.routers.chat import create_chat_router
+from app.services.snapshots import ClientCounter, snapshot_loop
 
 load_dotenv()  # Must be first — before any os.environ reads
 
@@ -35,9 +37,16 @@ async def lifespan(app: FastAPI):
     app.state.price_cache = price_cache
     app.state.market_source = source
     app.state.session_baselines = {}  # process-local; reset on restart by design (PLAN.md §6)
+    app.state.sse_clients = ClientCounter()
+    snapshot_task = asyncio.create_task(snapshot_loop(app), name="snapshot-loop")
     logger.info("FinAlly backend started (source=%s)", type(source).__name__)
     yield
     # --- shutdown ---
+    snapshot_task.cancel()
+    try:
+        await snapshot_task
+    except asyncio.CancelledError:
+        pass
     await source.stop()
     logger.info("FinAlly backend stopped")
 
