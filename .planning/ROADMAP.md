@@ -54,7 +54,18 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Selling debits shares, credits cash, removes the position when quantity hits zero, and refuses with `400 insufficient_shares` when oversold
   4. `POST /api/watchlist` and `DELETE /api/watchlist/{ticker}` enforce the regex format, the 50-ticker cap, and the held-position guard, returning the documented `400` codes; adds immediately seed the ticker into the active data source
   5. `GET /api/portfolio/history` returns a time series of snapshots; a snapshot is recorded after every trade and every 30s while at least one SSE client is connected, and the cadence task pauses when no client is connected
-**Plans**: TBD
+**Plans:** 3 plans
+- **Wave 1** — 02-01-PLAN.md: Trade execution + portfolio read (services/portfolio.py, GET /portfolio, POST /trade, concurrency-safe BEGIN IMMEDIATE) — PORT-01/02/03/05
+- **Wave 1** *(parallel with 02-01, no file overlap)* — 02-02-PLAN.md: Watchlist CRUD (services/watchlist.py, GET/POST/DELETE /watchlist, session Δ%, 50-cap, ticker_held, add_ticker seeding) — WATCH-01..05
+- **Wave 2** *(blocked on 02-01 + 02-02)* — 02-03-PLAN.md: Snapshot cadence + history (services/snapshots.py, ClientCounter + SSE counter hook in stream.py, lifespan cadence task, SNAP-02 trade wiring, GET /portfolio/history) — SNAP-01, SNAP-02, PORT-04
+
+**Cross-cutting constraints:**
+- 02-03 modifies `backend/app/main.py` (also touched by 02-02) and `backend/app/routers/portfolio.py` (also touched by 02-01) — waves enforce serial ordering after Wave 1
+- All error responses use the flat `JSONResponse({"error","message"}, status_code=N)` envelope — never `HTTPException`
+- All trade logic lives in `services/` (pure functions) so Phase 3's LLM auto-execution can call it directly
+- [ ] 02-01-PLAN.md — Trade execution + portfolio read: services/portfolio.py (build_portfolio_view, execute_trade), GET /portfolio, POST /trade; concurrency-safe via get_db_immediate
+- [ ] 02-02-PLAN.md — Watchlist CRUD: services/watchlist.py, GET/POST/DELETE /watchlist; session Δ% baseline, 50-cap, ticker_held guard, awaited add_ticker/remove_ticker
+- [ ] 02-03-PLAN.md — Snapshot cadence + history: services/snapshots.py (ClientCounter, record_snapshot, snapshot_loop), additive SSE counter in stream.py, lifespan cadence task, SNAP-02 trade wiring, GET /portfolio/history
 
 ### Phase 3: AI Chat
 **Goal**: A user can chat with FinAlly, receive structured analyses, and have the assistant auto-execute trades and watchlist edits, with deterministic behavior whenever an API key is absent or `LLM_MOCK=true`.
@@ -104,7 +115,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Backend Foundation | 3/3 | Complete | 2026-05-21 |
-| 2. Portfolio & Watchlist APIs | 0/TBD | Not started | - |
+| 2. Portfolio & Watchlist APIs | 0/3 | Not started | - |
 | 3. AI Chat | 0/TBD | Not started | - |
 | 4. Frontend Workstation | 0/TBD | Not started | - |
 | 5. Docker & E2E | 0/TBD | Not started | - |
