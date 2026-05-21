@@ -14,7 +14,8 @@
       "Bash(/home/agent/.local/bin/uv *)",
       "Bash(npm install *)",
       "Bash(pkill -f \"uvicorn app.main\")",
-      "Bash(pkill -9 -f \"uvicorn\")"
+      "Bash(pkill -9 -f \"uvicorn\")",
+      "Bash(uv run *)"
     ]
   },
   "enabledPlugins": {
