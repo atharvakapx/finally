@@ -77,15 +77,15 @@
 
 ### Infrastructure (INFRA)
 
-- [ ] **INFRA-01**: Multi-stage Dockerfile: Stage 1 (Node 20) builds Next.js static export; Stage 2 (Python 3.12) runs uvicorn
-- [ ] **INFRA-02**: Frontend static build output copied into the Python stage and served by FastAPI
-- [ ] **INFRA-03**: Container exposes and serves on port 8000 only (CMD: `uvicorn app.main:app`)
-- [ ] **INFRA-04**: `scripts/start_mac.sh` builds image if needed and runs container with volume mount, port mapping, and `--env-file .env`
-- [ ] **INFRA-05**: `scripts/stop_mac.sh` stops and removes container without deleting volume
-- [ ] **INFRA-06**: `scripts/start_windows.ps1` and `scripts/stop_windows.ps1` are PowerShell equivalents of the Mac scripts
-- [ ] **INFRA-07**: `.env.example` committed with all keys documented but values empty
+- [x] **INFRA-01**: Multi-stage Dockerfile: Stage 1 (Node 20) builds Next.js static export; Stage 2 (Python 3.12) runs uvicorn
+- [x] **INFRA-02**: Frontend static build output copied into the Python stage and served by FastAPI
+- [x] **INFRA-03**: Container exposes and serves on port 8000 only (CMD: `uvicorn app.main:app`)
+- [x] **INFRA-04**: `scripts/start_mac.sh` builds image if needed and runs container with volume mount, port mapping, and `--env-file .env`
+- [x] **INFRA-05**: `scripts/stop_mac.sh` stops and removes container without deleting volume
+- [x] **INFRA-06**: `scripts/start_windows.ps1` and `scripts/stop_windows.ps1` are PowerShell equivalents of the Mac scripts
+- [x] **INFRA-07**: `.env.example` committed with all keys documented but values empty
 - [ ] **INFRA-08**: E2E Playwright tests in `test/` cover: fresh start, add/remove ticker, buy shares, sell shares, portfolio viz, AI chat (mocked), SSE reconnection
-- [ ] **INFRA-09**: `db/` directory has `.gitkeep`; `db/finally.db` is gitignored
+- [x] **INFRA-09**: `db/` directory has `.gitkeep`; `db/finally.db` is gitignored
 
 ## v2 Requirements
 
@@ -174,15 +174,15 @@
 | UI-09 | Phase 4 | Complete |
 | UI-10 | Phase 4 | Complete |
 | UI-11 | Phase 4 | Pending |
-| INFRA-01 | Phase 5 | Pending |
-| INFRA-02 | Phase 5 | Pending |
-| INFRA-03 | Phase 5 | Pending |
-| INFRA-04 | Phase 5 | Pending |
-| INFRA-05 | Phase 5 | Pending |
-| INFRA-06 | Phase 5 | Pending |
-| INFRA-07 | Phase 5 | Pending |
-| INFRA-08 | Phase 5 | Pending |
-| INFRA-09 | Phase 5 | Pending |
+| INFRA-01 | Phase 5 Plan 01 | Complete |
+| INFRA-02 | Phase 5 Plan 01 | Complete |
+| INFRA-03 | Phase 5 Plan 01 | Complete |
+| INFRA-04 | Phase 5 Plan 01 | Complete |
+| INFRA-05 | Phase 5 Plan 01 | Complete |
+| INFRA-06 | Phase 5 Plan 01 | Complete |
+| INFRA-07 | Phase 5 Plan 01 | Complete |
+| INFRA-08 | Phase 5 Plan 02 | Pending |
+| INFRA-09 | Phase 5 Plan 01 | Complete |
 
 **Coverage:**
 - v1 requirements: 47 total
