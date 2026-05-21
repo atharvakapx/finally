@@ -31,7 +31,17 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Market data source (simulator by default, Massive when `MASSIVE_API_KEY` is set) is running and the PriceCache is populated within seconds of startup
   4. The Next.js static export directory is served at `/` (placeholder index is fine until Phase 4)
   5. Restarting the process preserves the database (existing `db/finally.db` is reused, not re-seeded)
-**Plans**: TBD
+**Plans:** 3 plans
+- **Wave 1** — 01-PLAN-01: Walking-skeleton bootable FastAPI app (health, static, dotenv)
+- **Wave 2** *(blocked on Wave 1 completion)* — 01-PLAN-02: SQLite schema + seed + lifespan wiring
+- **Wave 3** *(blocked on Wave 2 completion)* — 01-PLAN-03: Market data + stream router + stub routers
+
+**Cross-cutting constraints:**
+- `backend/app/main.py` is modified in all 3 plans — execute serially (waves enforce this)
+- All `app.state` reads (`price_cache`, `market_source`) must be present before any request is served
+- [ ] 01-PLAN-01.md — Walking-skeleton boot: FastAPI app + lifespan + python-dotenv + real /api/health + placeholder static page
+- [ ] 01-PLAN-02.md — SQLite layer: db.py with 6-table schema, seed, init_db, get_db, get_db_immediate; wired into lifespan startup
+- [ ] 01-PLAN-03.md — Market data wiring + router scaffold: PriceCache, create_market_data_source, create_stream_router, stub portfolio/watchlist/chat routers, full integration test
 
 ### Phase 2: Portfolio & Watchlist APIs
 **Goal**: A user (or a future LLM caller) can manage their watchlist and execute trades against live prices, with cash, positions, and portfolio snapshots updating consistently.
@@ -93,7 +103,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Backend Foundation | 0/TBD | Not started | - |
+| 1. Backend Foundation | 0/3 | Planned | - |
 | 2. Portfolio & Watchlist APIs | 0/TBD | Not started | - |
 | 3. AI Chat | 0/TBD | Not started | - |
 | 4. Frontend Workstation | 0/TBD | Not started | - |
