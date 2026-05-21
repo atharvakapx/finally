@@ -34,6 +34,7 @@ async def lifespan(app: FastAPI):
     await source.start(list(DEFAULT_TICKERS))
     app.state.price_cache = price_cache
     app.state.market_source = source
+    app.state.session_baselines = {}  # process-local; reset on restart by design (PLAN.md §6)
     logger.info("FinAlly backend started (source=%s)", type(source).__name__)
     yield
     # --- shutdown ---
