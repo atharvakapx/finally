@@ -13,7 +13,7 @@ FinAlly is a single-container AI trading workstation that streams live prices, r
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Backend Foundation** - FastAPI app wired to market data, SQLite lazy init, health check live *(completed 2026-05-21)*
-- [ ] **Phase 2: Portfolio & Watchlist APIs** - Trade execution, watchlist CRUD, and portfolio snapshots over the existing price cache
+- [x] **Phase 2: Portfolio & Watchlist APIs** - Trade execution, watchlist CRUD, and portfolio snapshots over the existing price cache *(completed 2026-05-21)*
 - [ ] **Phase 3: AI Chat** - LiteLLM + GPT-4.1-mini with structured outputs, auto-executing trades, and deterministic mock mode
 - [ ] **Phase 4: Frontend Workstation** - Next.js static export delivering the full Bloomberg-style terminal UI against live SSE + REST
 - [ ] **Phase 5: Docker & E2E** - Multi-stage container, start/stop scripts, `.env.example`, Playwright E2E suite
@@ -63,9 +63,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 - 02-03 modifies `backend/app/main.py` (also touched by 02-02) and `backend/app/routers/portfolio.py` (also touched by 02-01) — waves enforce serial ordering after Wave 1
 - All error responses use the flat `JSONResponse({"error","message"}, status_code=N)` envelope — never `HTTPException`
 - All trade logic lives in `services/` (pure functions) so Phase 3's LLM auto-execution can call it directly
-- [ ] 02-01-PLAN.md — Trade execution + portfolio read: services/portfolio.py (build_portfolio_view, execute_trade), GET /portfolio, POST /trade; concurrency-safe via get_db_immediate
-- [ ] 02-02-PLAN.md — Watchlist CRUD: services/watchlist.py, GET/POST/DELETE /watchlist; session Δ% baseline, 50-cap, ticker_held guard, awaited add_ticker/remove_ticker
-- [ ] 02-03-PLAN.md — Snapshot cadence + history: services/snapshots.py (ClientCounter, record_snapshot, snapshot_loop), additive SSE counter in stream.py, lifespan cadence task, SNAP-02 trade wiring, GET /portfolio/history
+- [x] 02-01-PLAN.md — Trade execution + portfolio read: services/portfolio.py (build_portfolio_view, execute_trade), GET /portfolio, POST /trade; concurrency-safe via get_db_immediate
+- [x] 02-02-PLAN.md — Watchlist CRUD: services/watchlist.py, GET/POST/DELETE /watchlist; session Δ% baseline, 50-cap, ticker_held guard, awaited add_ticker/remove_ticker
+- [x] 02-03-PLAN.md — Snapshot cadence + history: services/snapshots.py (ClientCounter, record_snapshot, snapshot_loop), additive SSE counter in stream.py, lifespan cadence task, SNAP-02 trade wiring, GET /portfolio/history
 
 ### Phase 3: AI Chat
 **Goal**: A user can chat with FinAlly, receive structured analyses, and have the assistant auto-execute trades and watchlist edits, with deterministic behavior whenever an API key is absent or `LLM_MOCK=true`.
@@ -115,7 +115,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Backend Foundation | 3/3 | Complete | 2026-05-21 |
-| 2. Portfolio & Watchlist APIs | 0/3 | Not started | - |
+| 2. Portfolio & Watchlist APIs | 3/3 | Complete | 2026-05-21 |
 | 3. AI Chat | 0/TBD | Not started | - |
 | 4. Frontend Workstation | 0/TBD | Not started | - |
 | 5. Docker & E2E | 0/TBD | Not started | - |
