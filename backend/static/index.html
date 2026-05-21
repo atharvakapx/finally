@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FinAlly</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: #0d1117;
+        color: #c9d1d9;
+        font-family: 'Courier New', Courier, monospace;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .container {
+        text-align: center;
+        padding: 2rem;
+        max-width: 600px;
+      }
+
+      .logo {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #38bdf8;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.5rem;
+      }
+
+      .tagline {
+        font-size: 1.1rem;
+        color: #8b949e;
+        margin-bottom: 2rem;
+      }
+
+      .divider {
+        border: none;
+        border-top: 1px solid #21262d;
+        margin: 1.5rem 0;
+      }
+
+      .status {
+        font-size: 0.9rem;
+        color: #8b949e;
+        line-height: 1.8;
+      }
+
+      .highlight {
+        color: #38bdf8;
+      }
+
+      .coming-soon {
+        display: inline-block;
+        margin-top: 1.5rem;
+        padding: 0.5rem 1.2rem;
+        border: 1px solid #30363d;
+        border-radius: 4px;
+        color: #8b949e;
+        font-size: 0.85rem;
+        background: #161b22;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">FinAlly</div>
+      <div class="tagline">AI-Powered Trading Workstation</div>
+
+      <hr class="divider" />
+
+      <div class="status">
+        <p>Backend is running. <span class="highlight">API is live.</span></p>
+        <p>
+          Health check:
+          <span class="highlight">/api/health</span>
+        </p>
+        <p>
+          Price stream:
+          <span class="highlight">/api/stream/prices</span>
+        </p>
+      </div>
+
+      <div class="coming-soon">Frontend coming in Phase 4</div>
+    </div>
+  </body>
+</html>
