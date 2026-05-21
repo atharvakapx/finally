@@ -12,7 +12,7 @@ FinAlly is a single-container AI trading workstation that streams live prices, r
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Backend Foundation** - FastAPI app wired to market data, SQLite lazy init, health check live
+- [x] **Phase 1: Backend Foundation** - FastAPI app wired to market data, SQLite lazy init, health check live *(completed 2026-05-21)*
 - [ ] **Phase 2: Portfolio & Watchlist APIs** - Trade execution, watchlist CRUD, and portfolio snapshots over the existing price cache
 - [ ] **Phase 3: AI Chat** - LiteLLM + GPT-4.1-mini with structured outputs, auto-executing trades, and deterministic mock mode
 - [ ] **Phase 4: Frontend Workstation** - Next.js static export delivering the full Bloomberg-style terminal UI against live SSE + REST
@@ -39,9 +39,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Cross-cutting constraints:**
 - `backend/app/main.py` is modified in all 3 plans — execute serially (waves enforce this)
 - All `app.state` reads (`price_cache`, `market_source`) must be present before any request is served
-- [ ] 01-PLAN-01.md — Walking-skeleton boot: FastAPI app + lifespan + python-dotenv + real /api/health + placeholder static page
-- [ ] 01-PLAN-02.md — SQLite layer: db.py with 6-table schema, seed, init_db, get_db, get_db_immediate; wired into lifespan startup
-- [ ] 01-PLAN-03.md — Market data wiring + router scaffold: PriceCache, create_market_data_source, create_stream_router, stub portfolio/watchlist/chat routers, full integration test
+- [x] 01-PLAN-01.md — Walking-skeleton boot: FastAPI app + lifespan + python-dotenv + real /api/health + placeholder static page
+- [x] 01-PLAN-02.md — SQLite layer: db.py with 6-table schema, seed, init_db, get_db, get_db_immediate; wired into lifespan startup
+- [x] 01-PLAN-03.md — Market data wiring + router scaffold: PriceCache, create_market_data_source, create_stream_router, stub portfolio/watchlist/chat routers, full integration test
 
 ### Phase 2: Portfolio & Watchlist APIs
 **Goal**: A user (or a future LLM caller) can manage their watchlist and execute trades against live prices, with cash, positions, and portfolio snapshots updating consistently.
@@ -103,7 +103,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Backend Foundation | 0/3 | Planned | - |
+| 1. Backend Foundation | 3/3 | Complete | 2026-05-21 |
 | 2. Portfolio & Watchlist APIs | 0/TBD | Not started | - |
 | 3. AI Chat | 0/TBD | Not started | - |
 | 4. Frontend Workstation | 0/TBD | Not started | - |
