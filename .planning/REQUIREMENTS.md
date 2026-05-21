@@ -128,15 +128,61 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CORE-01–05 | Phase 1 | Pending |
-| DB-01–05 | Phase 1 | Pending |
-| PORT-01–05 | Phase 2 | Pending |
-| WATCH-01–05 | Phase 2 | Pending |
-| SNAP-01–02 | Phase 2 | Pending |
-| CHAT-01–08 | Phase 3 | Pending |
-| FE-01–05 | Phase 4 | Pending |
-| UI-01–11 | Phase 4 | Pending |
-| INFRA-01–09 | Phase 5 | Pending |
+| CORE-01 | Phase 1 | Pending |
+| CORE-02 | Phase 1 | Pending |
+| CORE-03 | Phase 1 | Pending |
+| CORE-04 | Phase 1 | Pending |
+| CORE-05 | Phase 1 | Pending |
+| DB-01 | Phase 1 | Pending |
+| DB-02 | Phase 1 | Pending |
+| DB-03 | Phase 1 | Pending |
+| DB-04 | Phase 1 | Pending |
+| DB-05 | Phase 1 | Pending |
+| PORT-01 | Phase 2 | Pending |
+| PORT-02 | Phase 2 | Pending |
+| PORT-03 | Phase 2 | Pending |
+| PORT-04 | Phase 2 | Pending |
+| PORT-05 | Phase 2 | Pending |
+| WATCH-01 | Phase 2 | Pending |
+| WATCH-02 | Phase 2 | Pending |
+| WATCH-03 | Phase 2 | Pending |
+| WATCH-04 | Phase 2 | Pending |
+| WATCH-05 | Phase 2 | Pending |
+| SNAP-01 | Phase 2 | Pending |
+| SNAP-02 | Phase 2 | Pending |
+| CHAT-01 | Phase 3 | Pending |
+| CHAT-02 | Phase 3 | Pending |
+| CHAT-03 | Phase 3 | Pending |
+| CHAT-04 | Phase 3 | Pending |
+| CHAT-05 | Phase 3 | Pending |
+| CHAT-06 | Phase 3 | Pending |
+| CHAT-07 | Phase 3 | Pending |
+| CHAT-08 | Phase 3 | Pending |
+| FE-01 | Phase 4 | Pending |
+| FE-02 | Phase 4 | Pending |
+| FE-03 | Phase 4 | Pending |
+| FE-04 | Phase 4 | Pending |
+| FE-05 | Phase 4 | Pending |
+| UI-01 | Phase 4 | Pending |
+| UI-02 | Phase 4 | Pending |
+| UI-03 | Phase 4 | Pending |
+| UI-04 | Phase 4 | Pending |
+| UI-05 | Phase 4 | Pending |
+| UI-06 | Phase 4 | Pending |
+| UI-07 | Phase 4 | Pending |
+| UI-08 | Phase 4 | Pending |
+| UI-09 | Phase 4 | Pending |
+| UI-10 | Phase 4 | Pending |
+| UI-11 | Phase 4 | Pending |
+| INFRA-01 | Phase 5 | Pending |
+| INFRA-02 | Phase 5 | Pending |
+| INFRA-03 | Phase 5 | Pending |
+| INFRA-04 | Phase 5 | Pending |
+| INFRA-05 | Phase 5 | Pending |
+| INFRA-06 | Phase 5 | Pending |
+| INFRA-07 | Phase 5 | Pending |
+| INFRA-08 | Phase 5 | Pending |
+| INFRA-09 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 47 total
@@ -145,4 +191,4 @@
 
 ---
 *Requirements defined: 2026-05-21*
-*Last updated: 2026-05-21 after initial definition*
+*Last updated: 2026-05-21 after roadmap creation (full per-requirement traceability)*
