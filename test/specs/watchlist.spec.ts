@@ -11,7 +11,7 @@ test.describe('Watchlist', () => {
   test('default 10 tickers visible in watchlist', async ({ page }) => {
     await page.goto('/');
     // Wait for watchlist data to load
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
 
     for (const ticker of DEFAULT_TICKERS) {
       const locator = page.locator(`text=/\\b${ticker}\\b/`).first();
@@ -21,7 +21,7 @@ test.describe('Watchlist', () => {
 
   test('prices update via SSE within 5 seconds', async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
 
     // Capture a price for AAPL, then wait for it to change
     const aaplRow = page.locator('[data-ticker="AAPL"]').first();
@@ -41,7 +41,7 @@ test.describe('Watchlist', () => {
 
   test('connection status dot is green', async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
 
     const dot = page.locator('[data-testid="connection-status"]').first();
     await expect(dot).toBeVisible({ timeout: 10000 });
@@ -51,14 +51,14 @@ test.describe('Watchlist', () => {
 
   test('add PYPL ticker appears in watchlist', async ({ page, request }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
 
     // Add via API (most reliable for E2E)
     const res = await request.post('/api/watchlist', { data: { ticker: 'PYPL' } });
     expect(res.ok()).toBeTruthy();
 
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
     await expect(page.locator('text=/\\bPYPL\\b/').first()).toBeVisible({ timeout: 10000 });
   });
 
@@ -67,7 +67,7 @@ test.describe('Watchlist', () => {
     await request.post('/api/watchlist', { data: { ticker: 'PYPL' } }).catch(() => {});
 
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
     await expect(page.locator('text=/\\bPYPL\\b/').first()).toBeVisible({ timeout: 10000 });
 
     // Remove via API
@@ -75,7 +75,7 @@ test.describe('Watchlist', () => {
     expect(res.ok()).toBeTruthy();
 
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
     await expect(page.locator('text=/\\bPYPL\\b/').first()).not.toBeVisible({ timeout: 5000 });
   });
 });

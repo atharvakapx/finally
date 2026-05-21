@@ -8,7 +8,7 @@ test.describe('Portfolio', () => {
     }).catch(() => {});
 
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
 
     const heatmap = page.locator('[data-testid="portfolio-heatmap"], [data-section="heatmap"]').first();
     await expect(heatmap).toBeVisible({ timeout: 10000 });
@@ -23,7 +23,7 @@ test.describe('Portfolio', () => {
     }).catch(() => {});
 
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
 
     const chart = page.locator('[data-testid="pnl-chart"], [data-section="pnl-chart"]').first();
     await expect(chart).toBeVisible({ timeout: 10000 });
@@ -42,7 +42,7 @@ test.describe('Portfolio', () => {
     }).catch(() => {});
 
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
 
     const positions = page.locator('[data-testid="positions-table"], [data-section="positions"]').first();
     await expect(positions).toBeVisible({ timeout: 10000 });

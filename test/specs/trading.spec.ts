@@ -18,9 +18,16 @@ test.describe('Trading', () => {
     expect(buyBody.trade.side).toBe('buy');
     expect(buyBody.cash_balance).toBeLessThan(initialCash);
 
+    // Record post-buy quantity
+    const afterBuy = await request.get('/api/portfolio');
+    const afterBuyBody = await afterBuy.json();
+    const aaplAfterBuy = (afterBuyBody.positions || []).find((p: any) => p.ticker === 'AAPL');
+    expect(aaplAfterBuy).toBeDefined();
+    const quantityAfterBuy: number = aaplAfterBuy.quantity;
+
     // Now load the page and verify UI shows position
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
 
     // Look for AAPL in positions area
     const positionsArea = page.locator('[data-testid="positions-table"], [data-section="positions"]').first();
@@ -35,17 +42,17 @@ test.describe('Trading', () => {
     const sellBody = await sellRes.json();
     expect(sellBody.cash_balance).toBeGreaterThan(buyBody.cash_balance);
 
-    // Verify position quantity is now 3
+    // Verify position quantity decreased by exactly 2
     const after = await request.get('/api/portfolio');
     const afterBody = await after.json();
     const aaplPos = (afterBody.positions || []).find((p: any) => p.ticker === 'AAPL');
     expect(aaplPos).toBeDefined();
-    expect(aaplPos.quantity).toBeCloseTo(3, 4);
+    expect(aaplPos.quantity).toBeCloseTo(quantityAfterBuy - 2, 4);
   });
 
   test('buy AAPL via trade bar UI', async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
 
     const tickerInput = page.locator('[data-testid="trade-ticker"], input[name="ticker"]').first();
     const qtyInput = page.locator('[data-testid="trade-quantity"], input[name="quantity"]').first();

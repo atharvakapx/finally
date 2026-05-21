@@ -36,7 +36,7 @@ function ActionBadge({ message }: { message: ChatMessage }) {
 export function ChatPanel() {
   const { chat, chatBusy, sendChat } = useTradingStore();
   const [input, setInput] = useState("");
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 

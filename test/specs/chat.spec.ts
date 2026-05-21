@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Chat (LLM_MOCK=true)', () => {
   test('send a message and receive a response', async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
 
     // Open chat panel if needed
     const toggle = page.locator('[data-testid="chat-toggle"], button:has-text("Chat")').first();

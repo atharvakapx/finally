@@ -138,10 +138,10 @@ export default function TradingWorkstation() {
             selectedTicker={selectedTicker}
           />
         </div>
-
-        {/* Chat panel */}
-        <ChatPanel />
       </div>
+
+      {/* Chat panel — outside scroll area so it's always visible at bottom */}
+      <ChatPanel />
     </div>
   );
 }
