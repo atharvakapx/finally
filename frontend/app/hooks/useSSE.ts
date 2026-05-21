@@ -10,11 +10,13 @@ export type PriceData = {
 }
 export type ConnectionStatus = 'green' | 'yellow' | 'red'
 
-export function useSSE() {
+export function useSSE(onPrice?: (data: PriceData) => void) {
   const [prices, setPrices] = useState<Record<string, PriceData>>({})
   const [status, setStatus] = useState<ConnectionStatus>('red')
   const lastEventRef = useRef<number>(0)
   const esRef = useRef<EventSource | null>(null)
+  const onPriceRef = useRef(onPrice)
+  onPriceRef.current = onPrice
 
   const connect = useCallback(() => {
     if (esRef.current) esRef.current.close()
@@ -28,6 +30,7 @@ export function useSSE() {
         const data: PriceData = JSON.parse(e.data)
         lastEventRef.current = Date.now()
         setPrices(prev => ({ ...prev, [data.ticker]: data }))
+        onPriceRef.current?.(data)
       } catch {
         // ignore malformed events
       }
