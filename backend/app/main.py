@@ -58,7 +58,7 @@ app = FastAPI(title="FinAlly", lifespan=lifespan)
 app.include_router(health.router, prefix="/api")
 app.include_router(create_portfolio_router(price_cache), prefix="/api")
 app.include_router(create_watchlist_router(price_cache), prefix="/api")
-app.include_router(create_chat_router(), prefix="/api")
+app.include_router(create_chat_router(price_cache), prefix="/api")
 
 # stream.py's APIRouter already has prefix="/api/stream" — do NOT add prefix="/api" again
 # (that would produce /api/api/stream/prices).
