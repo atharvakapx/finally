@@ -60,14 +60,13 @@ class TestPhase1Integration:
         assert isinstance(items, list)
         assert len(items) == 10, f"Expected 10 default tickers, got {len(items)}"
 
-    def test_chat_stub_returns_501(self, app_client) -> None:
-        """POST /api/chat returns 501 with Phase 3 message in Phase 1."""
+    def test_chat_returns_200(self, app_client) -> None:
+        """POST /api/chat returns 200 (Phase 3 implemented; 501 stub replaced)."""
         client, _ = app_client
         resp = client.post("/api/chat", json={"message": "hi"})
-        assert resp.status_code == 501
+        assert resp.status_code == 200
         data = resp.json()
-        assert data["error"] == "not_implemented"
-        assert data["message"] == "Coming in Phase 3"
+        assert "message" in data
 
     def test_market_source_is_simulator_when_no_massive_key(self, app_client) -> None:
         """When MASSIVE_API_KEY is absent, SimulatorDataSource is used."""
