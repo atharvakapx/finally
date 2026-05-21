@@ -165,7 +165,13 @@ export function TradingStoreProvider({
         const res = await api.chat(message);
         setChat((c) => [
           ...c,
-          { ...res.message, actions: res.actions ?? res.message.actions },
+          {
+            id: `assistant-${Date.now()}`,
+            role: "assistant" as const,
+            content: res.message,
+            actions: undefined,
+            created_at: new Date().toISOString(),
+          },
         ]);
         // Any executed actions may affect portfolio/watchlist.
         await Promise.all([refreshPortfolio(), refreshWatchlist()]);

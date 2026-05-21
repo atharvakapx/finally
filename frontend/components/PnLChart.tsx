@@ -54,6 +54,7 @@ export function PnLChart() {
 
   return (
     <Card
+      testId="pnl-chart"
       title={
         <div className="flex items-baseline gap-3">
           <span>P&amp;L</span>
@@ -119,7 +120,7 @@ export function PnLChart() {
                   color: "#e6edf3",
                 }}
                 labelStyle={{ color: "#8b949e" }}
-                formatter={(v: number) => [fmtUsd(v), "Total"]}
+                formatter={(v) => [fmtUsd(typeof v === "number" ? v : 0), "Total"]}
               />
               <Area
                 type="monotone"

@@ -30,7 +30,7 @@ export function PositionsTable({
 
   return (
     <Card title="Positions" bodyClassName="overflow-hidden" dense>
-      <div className="flex-1 overflow-auto">
+      <div data-testid="positions-table" className="flex-1 overflow-auto">
         <table className="w-full text-sm">
           <thead className="sticky top-0 z-10 bg-[var(--color-surface)]/95 backdrop-blur">
             <tr className="text-[10px] uppercase tracking-wider text-[var(--color-text-muted)]">

@@ -70,6 +70,7 @@ export function TradeBar({ selectedTicker }: TradeBarProps) {
             }
             placeholder="AAPL"
             aria-label="Trade symbol"
+            data-testid="trade-ticker"
             className="h-8 w-24 rounded border border-[var(--color-border)] bg-[var(--color-surface-2)] px-2 font-mono text-sm uppercase tracking-wider focus:border-[var(--color-accent-cyan)] focus:outline-none"
           />
         </label>
@@ -85,6 +86,7 @@ export function TradeBar({ selectedTicker }: TradeBarProps) {
             onChange={(e) => setQty(e.target.value)}
             placeholder="0"
             aria-label="Trade quantity"
+            data-testid="trade-quantity"
             className="h-8 w-28 rounded border border-[var(--color-border)] bg-[var(--color-surface-2)] px-2 font-mono text-sm focus:border-[var(--color-accent-cyan)] focus:outline-none"
           />
         </label>

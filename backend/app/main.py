@@ -78,7 +78,10 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     snapshot_task = asyncio.create_task(snapshot_loop(state), name="snapshot-loop")
 
     # Mount the SSE router now that we have the price cache + client tracker.
+    # This MUST happen before _mount_static adds the /{full_path:path} catch-all,
+    # otherwise Starlette matches the catch-all first and returns 404 for SSE.
     app.include_router(create_stream_router(price_cache, client_tracker=state.sse_clients))
+    _mount_static(app)
 
     try:
         yield
@@ -114,7 +117,8 @@ def create_app() -> FastAPI:
     app.include_router(watchlist_api.router)
     app.include_router(chat_api.router)
 
-    _mount_static(app)
+    # NOTE: _mount_static is called in lifespan() AFTER the SSE router,
+    # so the catch-all doesn't shadow /api/stream/prices.
     return app
 
 

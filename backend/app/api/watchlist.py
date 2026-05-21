@@ -60,7 +60,7 @@ def list_watchlist(state: AppState = Depends(get_state)) -> dict[str, Any]:
     with get_db(state.db_path) as conn:
         rows = get_watchlist(conn, DEFAULT_USER_ID)
     enriched = [_enrich_with_price(row, state) for row in rows]
-    return {"watchlist": enriched, "count": len(enriched), "cap": WATCHLIST_CAP}
+    return {"tickers": enriched, "count": len(enriched), "cap": WATCHLIST_CAP}
 
 
 @router.post("", status_code=201)

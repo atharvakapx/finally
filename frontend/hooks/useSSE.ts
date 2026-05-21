@@ -66,27 +66,24 @@ export function useSSE(): UseSSEResult {
       source.onmessage = (e) => {
         if (cancelled) return;
         try {
-          const data = JSON.parse(e.data) as PriceUpdate;
+          // The backend sends a batch: { TICKER: PriceUpdate, ... }
+          const batch = JSON.parse(e.data) as Record<string, PriceUpdate>;
           const now = Date.now();
           lastEventRef.current = now;
           setLastEventAt(now);
           setConnection("green");
           setPrices((prev) => {
-            const existing = prev[data.ticker];
-            const baseline = existing?.baseline ?? data.previous_price ?? data.price;
-            const nextSpark = (existing?.spark ?? []).concat({
-              t: now,
-              price: data.price,
-            });
-            if (nextSpark.length > SPARK_BUFFER) {
-              nextSpark.splice(0, nextSpark.length - SPARK_BUFFER);
-            }
-            const sessionChangePct =
-              baseline > 0 ? (data.price - baseline) / baseline : 0;
-            return {
-              ...prev,
-              [data.ticker]: {
-                ticker: data.ticker,
+            const next = { ...prev };
+            for (const [ticker, data] of Object.entries(batch)) {
+              const existing = prev[ticker];
+              const baseline = existing?.baseline ?? data.previous_price ?? data.price;
+              const nextSpark = (existing?.spark ?? []).concat({ t: now, price: data.price });
+              if (nextSpark.length > SPARK_BUFFER) {
+                nextSpark.splice(0, nextSpark.length - SPARK_BUFFER);
+              }
+              const sessionChangePct = baseline > 0 ? (data.price - baseline) / baseline : 0;
+              next[ticker] = {
+                ticker,
                 price: data.price,
                 previousPrice: data.previous_price,
                 baseline,
@@ -95,8 +92,9 @@ export function useSSE(): UseSSEResult {
                 lastEventAt: now,
                 spark: nextSpark,
                 tick: (existing?.tick ?? 0) + 1,
-              },
-            };
+              };
+            }
+            return next;
           });
         } catch {
           // Ignore malformed payloads; the stream is fire-and-forget.

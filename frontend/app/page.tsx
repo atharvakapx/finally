@@ -1,65 +1,147 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import { useMarketData } from "@/hooks/useMarketData";
+import { useTradingStore } from "@/hooks/useTradingStore";
+import { fmtUsd } from "@/lib/format";
+import { ChatPanel } from "@/components/ChatPanel";
+import { MainChart } from "@/components/MainChart";
+import { PnLChart } from "@/components/PnLChart";
+import { PortfolioHeatmap } from "@/components/PortfolioHeatmap";
+import { PositionsTable } from "@/components/PositionsTable";
+import { TradeBar } from "@/components/TradeBar";
+import { WatchlistPanel } from "@/components/WatchlistPanel";
+
+function ConnectionDot({ status }: { status: "green" | "yellow" | "red" }) {
+  const colorMap: Record<string, string> = {
+    green: "bg-[var(--color-green)]",
+    yellow: "bg-[var(--color-amber)]",
+    red: "bg-[var(--color-red)]",
+  };
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <span
+      data-testid="connection-status"
+      data-status={status}
+      title={`Connection: ${status}`}
+      className={`inline-block h-2 w-2 rounded-full ${colorMap[status]} ${status !== "red" ? "status-pulse" : ""}`}
+    />
+  );
+}
+
+export default function TradingWorkstation() {
+  const [selectedTicker, setSelectedTicker] = useState<string | null>(null);
+  const { connection } = useMarketData();
+  const { portfolio } = useTradingStore();
+
+  const totalValue = portfolio?.total_value ?? 10000;
+  const cashBalance = portfolio?.cash_balance ?? 10000;
+
+  return (
+    <div className="terminal-grid flex h-screen flex-col overflow-hidden bg-[var(--color-bg)] text-[var(--color-text-primary)]">
+      {/* ── Header ── */}
+      <header className="flex shrink-0 items-center gap-4 border-b border-[var(--color-border)] bg-[var(--color-surface)]/90 px-4 py-2 backdrop-blur-sm">
+        {/* Logo */}
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-base font-bold tracking-widest text-[var(--color-accent-cyan)]">
+            FIN
+          </span>
+          <span className="font-mono text-base font-bold tracking-widest text-[var(--color-text-primary)]">
+            ALLY
+          </span>
+          <span className="ml-1 rounded border border-[var(--color-accent-cyan)]/30 bg-[var(--color-accent-cyan)]/10 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-widest text-[var(--color-accent-cyan)]">
+            AI
+          </span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+        <div className="mx-2 h-4 w-px bg-[var(--color-border)]" />
+
+        {/* Portfolio value */}
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-[10px] uppercase tracking-wider text-[var(--color-text-muted)]">
+            Total
+          </span>
+          <span className="font-mono text-sm font-semibold tabular-nums text-[var(--color-text-primary)]">
+            {fmtUsd(totalValue)}
+          </span>
+        </div>
+
+        <div className="h-4 w-px bg-[var(--color-border)]" />
+
+        {/* Cash */}
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-[10px] uppercase tracking-wider text-[var(--color-text-muted)]">
+            Cash
+          </span>
+          <span className="font-mono text-sm tabular-nums text-[var(--color-accent-cyan)]">
+            {fmtUsd(cashBalance)}
+          </span>
+        </div>
+
+        <div className="flex-1" />
+
+        {/* Connection status */}
+        <div className="flex items-center gap-2">
+          <ConnectionDot status={connection} />
+          <span className="text-[10px] uppercase tracking-wider text-[var(--color-text-muted)]">
+            {connection === "green"
+              ? "Live"
+              : connection === "yellow"
+                ? "Stalling"
+                : "Offline"}
+          </span>
+        </div>
+      </header>
+
+      {/* ── Main body (scrollable) ── */}
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+        {/* Top section: Watchlist + right panel stack */}
+        <div className="flex min-h-0 flex-1 gap-2 p-2">
+          {/* Left: Watchlist */}
+          <div className="flex w-72 shrink-0 flex-col">
+            <WatchlistPanel
+              selectedTicker={selectedTicker}
+              onSelect={setSelectedTicker}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+
+          {/* Right: Chart + TradeBar + Heatmap/PnL row */}
+          <div className="flex min-w-0 flex-1 flex-col gap-2">
+            {/* Main chart */}
+            <div className="min-h-0" style={{ flex: "3 1 0" }}>
+              <MainChart ticker={selectedTicker} />
+            </div>
+
+            {/* Trade bar */}
+            <div className="shrink-0">
+              <TradeBar selectedTicker={selectedTicker} />
+            </div>
+
+            {/* Heatmap + PnL side by side */}
+            <div className="flex min-h-0 gap-2" style={{ flex: "2 1 0" }}>
+              <div className="min-w-0 flex-1">
+                <PortfolioHeatmap
+                  onSelect={setSelectedTicker}
+                  selectedTicker={selectedTicker}
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <PnLChart />
+              </div>
+            </div>
+          </div>
         </div>
-      </main>
+
+        {/* Positions table */}
+        <div className="shrink-0 px-2 pb-2">
+          <PositionsTable
+            onSelect={setSelectedTicker}
+            selectedTicker={selectedTicker}
+          />
+        </div>
+
+        {/* Chat panel */}
+        <ChatPanel />
+      </div>
     </div>
   );
 }

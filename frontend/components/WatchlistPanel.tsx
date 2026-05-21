@@ -71,6 +71,7 @@ export function WatchlistPanel({
                 <tr
                   key={entry.ticker}
                   data-testid={`watchlist-row-${entry.ticker}`}
+                  data-ticker={entry.ticker}
                   onClick={() => onSelect(entry.ticker)}
                   className={`group cursor-pointer border-t border-[var(--color-border-soft)] transition ${
                     sel

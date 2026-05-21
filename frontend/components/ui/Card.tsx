@@ -7,6 +7,7 @@ interface CardProps {
   className?: string;
   bodyClassName?: string;
   dense?: boolean;
+  testId?: string;
 }
 
 export function Card({
@@ -16,9 +17,11 @@ export function Card({
   className = "",
   bodyClassName = "",
   dense = false,
+  testId,
 }: CardProps) {
   return (
     <section
+      data-testid={testId}
       className={`flex min-h-0 flex-col rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]/80 backdrop-blur-sm ${className}`}
     >
       {(title || action) && (

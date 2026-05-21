@@ -144,7 +144,7 @@ export function PortfolioHeatmap({
   }, [portfolio, prices]);
 
   return (
-    <Card title="Heatmap" bodyClassName="relative p-2">
+    <Card testId="portfolio-heatmap" title="Heatmap" bodyClassName="relative p-2">
       {rects.length === 0 ? (
         <div className="flex h-full min-h-[140px] items-center justify-center text-xs text-[var(--color-text-muted)]">
           No positions to visualize
@@ -158,6 +158,7 @@ export function PortfolioHeatmap({
               <button
                 key={r.node.ticker}
                 type="button"
+                data-heatmap-cell={r.node.ticker}
                 onClick={() => onSelect(r.node.ticker)}
                 title={`${r.node.ticker} — ${fmtUsd(r.node.value)} (${(sharePct * 100).toFixed(1)}%) — ${fmtPct(r.node.plPct)}`}
                 style={{
