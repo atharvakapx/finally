@@ -55,24 +55,15 @@ class TestPhase1Integration:
             assert data["error"] == "not_implemented", data
             assert data["message"] == "Coming in Phase 2", data
 
-    def test_watchlist_stubs_return_501(self, app_client) -> None:
-        """Watchlist endpoints return 501 not_implemented in Phase 1."""
+    def test_watchlist_endpoints_live(self, app_client) -> None:
+        """Watchlist endpoints are live (Phase 2 implemented); GET returns 200 with items."""
         client, _ = app_client
-        for method, path, body in [
-            ("GET", "/api/watchlist", None),
-            ("POST", "/api/watchlist", {"ticker": "AAPL"}),
-            ("DELETE", "/api/watchlist/AAPL", None),
-        ]:
-            if method == "GET":
-                resp = client.get(path)
-            elif method == "POST":
-                resp = client.post(path, json=body)
-            else:
-                resp = client.delete(path)
-            assert resp.status_code == 501, f"{method} {path} returned {resp.status_code}"
-            data = resp.json()
-            assert data["error"] == "not_implemented", data
-            assert data["message"] == "Coming in Phase 2", data
+        # GET should now return 200 with the seeded watchlist (not 501 stub)
+        resp = client.get("/api/watchlist")
+        assert resp.status_code == 200, f"GET /api/watchlist returned {resp.status_code}: {resp.json()}"
+        items = resp.json()
+        assert isinstance(items, list)
+        assert len(items) == 10, f"Expected 10 default tickers, got {len(items)}"
 
     def test_chat_stub_returns_501(self, app_client) -> None:
         """POST /api/chat returns 501 with Phase 3 message in Phase 1."""
