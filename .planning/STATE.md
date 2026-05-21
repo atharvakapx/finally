@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 4 Plan 01 complete — Next.js frontend bootstrap with SSE watchlist
-last_updated: "2026-05-21T17:44:33Z"
-last_activity: 2026-05-21 -- Phase 4 Plan 01 complete (Next.js 16, dark theme, useSSE, WatchlistPanel, Sparkline, Header)
+stopped_at: Phase 4 Plan 02 complete — full Bloomberg terminal UI with all 7 components
+last_updated: "2026-05-21T17:54:13Z"
+last_activity: 2026-05-21 -- Phase 4 Plan 02 complete (MainChart, PortfolioHeatmap, PnLChart, PositionsTable, TradeBar, ChatPanel, full layout assembly)
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 9
-  completed_plans: 8
-  percent: 89
+  completed_plans: 9
+  percent: 100
 ---
 
 # Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-05-21)
 
 ## Current Position
 
-Phase: 4 (Frontend Workstation) — IN PROGRESS (1/2 plans complete)
-Next: Phase 4 Plan 02 (full UI panels: chart, portfolio heatmap, trade bar, AI chat)
-Status: Phase 4 Plan 01 complete; Next.js frontend with SSE watchlist live
-Last activity: 2026-05-21 -- Phase 4 Plan 01 complete (Next.js 16, dark theme, useSSE, WatchlistPanel, Sparkline, Header)
+Phase: 4 (Frontend Workstation) — COMPLETE (2/2 plans complete)
+Next: Phase 5 — Docker & E2E
+Status: Phase 4 complete; full Bloomberg terminal UI live with all components
+Last activity: 2026-05-21 -- Phase 4 Plan 02 complete (MainChart, PortfolioHeatmap, PnLChart, PositionsTable, TradeBar, ChatPanel, full layout assembly)
 
-Progress: [████████████████████████████] 89% (8/9 plans, 3/5 phases complete)
+Progress: [████████████████████████████████] 100% (9/9 plans, 4/5 phases complete)
 
 ## Performance Metrics
 
@@ -67,6 +67,9 @@ Recent decisions affecting current work:
 - Phase 2: `ClientCounter` in `services/snapshots.py` gates snapshot cadence; SSE stream.py increments/decrements on connect/disconnect
 - Phase 4 Plan 01: Next.js 16 with Tailwind v4 (CSS-first, no tailwind.config.ts); static export via `output: 'export'`; page.tsx is 'use client' because it uses useSSE + useState
 - Phase 4 Plan 01: All API calls use same-origin `/api/*` paths — no hardcoded localhost, no CORS needed
+- Phase 4 Plan 02: useSSE extended with optional onPrice callback to update ring buffer without extra re-renders
+- Phase 4 Plan 02: portfolio-updated CustomEvent used to coordinate TradeBar->Heatmap/Table/PnLChart refresh without prop drilling
+- Phase 4 Plan 02: lightweight-charts v5 addSeries(LineSeries/AreaSeries) API used (not deprecated addLineSeries)
 
 ### Pending Todos
 
@@ -86,6 +89,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-05-21T17:44:33Z
-Stopped at: Completed Phase 4 Plan 01 — Next.js frontend bootstrap with SSE watchlist
+Last session: 2026-05-21T17:54:13Z
+Stopped at: Completed Phase 4 Plan 02 — Full Bloomberg terminal UI with all 7 components
 Resume file: None

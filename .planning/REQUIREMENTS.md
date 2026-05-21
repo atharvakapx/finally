@@ -66,13 +66,13 @@
 - [ ] **UI-01**: Watchlist panel shows ticker symbol, current price, session Δ%, and sparkline for each watched ticker
 - [ ] **UI-02**: Price flash animation: brief green/red background CSS transition (~500ms) on each price update
 - [ ] **UI-03**: Sparkline ring buffer accumulates 120 price points from SSE stream per ticker
-- [ ] **UI-04**: Clicking a watchlist ticker selects it and displays it in the main chart area
-- [ ] **UI-05**: Main chart area shows price-over-time chart for the selected ticker
-- [ ] **UI-06**: Portfolio heatmap (treemap) where rectangles are sized by portfolio weight and colored by P&L
-- [ ] **UI-07**: P&L chart (line chart) showing total portfolio value over time from `/api/portfolio/history`
-- [ ] **UI-08**: Positions table showing ticker, quantity, avg cost, current price, unrealized P&L, % change
-- [ ] **UI-09**: Trade bar with ticker input, quantity input, buy button, and sell button (market orders, instant fill)
-- [ ] **UI-10**: AI chat panel (collapsible/docked) with message history, text input, loading indicator, and inline trade confirmations
+- [x] **UI-04**: Clicking a watchlist ticker selects it and displays it in the main chart area
+- [x] **UI-05**: Main chart area shows price-over-time chart for the selected ticker
+- [x] **UI-06**: Portfolio heatmap (treemap) where rectangles are sized by portfolio weight and colored by P&L
+- [x] **UI-07**: P&L chart (line chart) showing total portfolio value over time from `/api/portfolio/history`
+- [x] **UI-08**: Positions table showing ticker, quantity, avg cost, current price, unrealized P&L, % change
+- [x] **UI-09**: Trade bar with ticker input, quantity input, buy button, and sell button (market orders, instant fill)
+- [x] **UI-10**: AI chat panel (collapsible/docked) with message history, text input, loading indicator, and inline trade confirmations
 - [ ] **UI-11**: Header displays total portfolio value (live-updating), cash balance, and SSE connection status dot
 
 ### Infrastructure (INFRA)
@@ -166,13 +166,13 @@
 | UI-01 | Phase 4 | Pending |
 | UI-02 | Phase 4 | Pending |
 | UI-03 | Phase 4 | Pending |
-| UI-04 | Phase 4 | Pending |
-| UI-05 | Phase 4 | Pending |
-| UI-06 | Phase 4 | Pending |
-| UI-07 | Phase 4 | Pending |
-| UI-08 | Phase 4 | Pending |
-| UI-09 | Phase 4 | Pending |
-| UI-10 | Phase 4 | Pending |
+| UI-04 | Phase 4 | Complete |
+| UI-05 | Phase 4 | Complete |
+| UI-06 | Phase 4 | Complete |
+| UI-07 | Phase 4 | Complete |
+| UI-08 | Phase 4 | Complete |
+| UI-09 | Phase 4 | Complete |
+| UI-10 | Phase 4 | Complete |
 | UI-11 | Phase 4 | Pending |
 | INFRA-01 | Phase 5 | Pending |
 | INFRA-02 | Phase 5 | Pending |
