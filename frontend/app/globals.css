@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+:root {
+  --bg-primary: #0d1117;
+  --bg-secondary: #1a1a2e;
+  --bg-card: #161b22;
+  --border: #30363d;
+  --text-primary: #e6edf3;
+  --text-muted: #8b949e;
+  --cyan: #38BDF8;
+  --blue: #3B82F6;
+  --blue-dark: #2563EB;
+  --green: #3fb950;
+  --red: #f85149;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg-primary); color: var(--text-primary); font-family: 'JetBrains Mono', 'Consolas', monospace; margin: 0; }
+
+@keyframes flash-green { 0%,100% { background: transparent; } 30% { background: rgba(63,185,80,0.25); } }
+@keyframes flash-red   { 0%,100% { background: transparent; } 30% { background: rgba(248,81,73,0.25); } }
+.flash-green { animation: flash-green 500ms ease-out; }
+.flash-red   { animation: flash-red   500ms ease-out; }
