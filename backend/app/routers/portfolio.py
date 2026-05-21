@@ -8,8 +8,10 @@ from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
+from app.db import get_db
 from app.market import PriceCache
 from app.services.portfolio import build_portfolio_view, execute_trade
+from app.services.snapshots import record_snapshot
 
 logger = logging.getLogger(__name__)
 
@@ -54,14 +56,25 @@ def create_portfolio_router(price_cache: PriceCache) -> APIRouter:
         if isinstance(result, tuple):
             code, msg, status = result
             return JSONResponse({"error": code, "message": msg}, status_code=status)
+        # SNAP-02: record snapshot after successful trade commit (post-commit, not inside txn)
+        record_snapshot(request.app.state.price_cache)
         return JSONResponse(result, status_code=200)
 
     @router.get("/history")
     def get_history() -> JSONResponse:  # plain def → threadpool
-        """Return portfolio value snapshots over time. Implemented in plan 02-03."""
+        """Return portfolio value snapshots over time (PORT-04).
+
+        Returns all portfolio_snapshots rows for the default user, ordered
+        ascending by recorded_at, as a list of {total_value, recorded_at} dicts.
+        """
+        with get_db() as conn:
+            rows = conn.execute(
+                "SELECT total_value, recorded_at FROM portfolio_snapshots "
+                "WHERE user_id='default' ORDER BY recorded_at ASC"
+            ).fetchall()
         return JSONResponse(
-            {"error": "not_implemented", "message": "Coming in Phase 2"},
-            status_code=501,
+            [{"total_value": r["total_value"], "recorded_at": r["recorded_at"]} for r in rows],
+            status_code=200,
         )
 
     return router

@@ -38,17 +38,17 @@ class TestPhase1Integration:
         assert response.status_code == 200
         assert response.json() == {"status": "ok"}
 
-    def test_portfolio_history_stub_returns_501(self, app_client) -> None:
-        """GET /api/portfolio/history still returns 501 until plan 02-03 implements it.
+    def test_portfolio_history_endpoint_live(self, app_client) -> None:
+        """GET /api/portfolio/history returns 200 with a list (plan 02-03 implemented it).
 
-        GET /api/portfolio and POST /api/portfolio/trade are now implemented
-        (plan 02-01) and return 200; this test was updated accordingly.
+        Returns an empty list on a fresh DB (no snapshots yet), or a list of
+        {total_value, recorded_at} dicts if snapshots exist.
         """
         client, _ = app_client
         resp = client.get("/api/portfolio/history")
-        assert resp.status_code == 501, f"GET /api/portfolio/history returned {resp.status_code}"
+        assert resp.status_code == 200, f"GET /api/portfolio/history returned {resp.status_code}: {resp.json()}"
         data = resp.json()
-        assert data["error"] == "not_implemented", data
+        assert isinstance(data, list), f"Expected list, got {type(data)}: {data}"
 
     def test_watchlist_endpoints_live(self, app_client) -> None:
         """Watchlist endpoints are live (Phase 2 implemented); GET returns 200 with items."""

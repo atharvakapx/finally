@@ -38,8 +38,9 @@ def create_stream_router(price_cache: PriceCache) -> APIRouter:
         Includes a retry directive so the browser auto-reconnects on
         disconnection (EventSource built-in behavior).
         """
+        counter = getattr(request.app.state, "sse_clients", None)
         return StreamingResponse(
-            _generate_events(price_cache, request),
+            _generate_events(price_cache, request, counter=counter),
             media_type="text/event-stream",
             headers={
                 "Cache-Control": "no-cache",
@@ -54,13 +55,22 @@ def create_stream_router(price_cache: PriceCache) -> APIRouter:
 async def _generate_events(
     price_cache: PriceCache,
     request: Request,
+    counter=None,
     interval: float = 0.5,
 ) -> AsyncGenerator[str, None]:
     """Async generator that yields SSE-formatted price events.
 
     Sends all prices every `interval` seconds. Stops when the client
     disconnects (detected via request.is_disconnected()).
+
+    The optional `counter` parameter (a ClientCounter instance) is
+    incremented when a client connects and decremented in the `finally`
+    block so it correctly tracks connected clients even on clean disconnect
+    or CancelledError. Pass None to skip tracking (existing tests, no lifespan).
     """
+    if counter is not None:
+        counter.increment()
+
     # Tell the client to retry after 1 second if the connection drops
     yield "retry: 1000\n\n"
 
@@ -96,3 +106,6 @@ async def _generate_events(
             await asyncio.sleep(interval)
     except asyncio.CancelledError:
         logger.info("SSE stream cancelled for: %s", client_ip)
+    finally:
+        if counter is not None:
+            counter.decrement()
