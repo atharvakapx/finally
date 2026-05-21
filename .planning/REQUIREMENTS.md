@@ -39,14 +39,14 @@
 
 ### Chat / LLM (CHAT)
 
-- [ ] **CHAT-01**: `POST /api/chat` sends user message with full portfolio context (cash, positions, watchlist with live prices) to LLM
-- [ ] **CHAT-02**: LLM response uses structured output schema: `{message, trades[], watchlist_changes[]}`
-- [ ] **CHAT-03**: Trades specified in LLM response auto-execute via same validation as manual trades
-- [ ] **CHAT-04**: Watchlist changes in LLM response auto-apply (add/remove)
-- [ ] **CHAT-05**: Mock mode returns deterministic canned responses when `OPENAI_API_KEY` is absent or empty
-- [ ] **CHAT-06**: `LLM_MOCK=true` forces mock mode even when `OPENAI_API_KEY` is set
-- [ ] **CHAT-07**: Last 20 messages loaded as conversation history context for each LLM call
-- [ ] **CHAT-08**: Dollar-amount requests ("buy $500 of NVDA") handled by LLM converting to share count using live price in context
+- [x] **CHAT-01**: `POST /api/chat` sends user message with full portfolio context (cash, positions, watchlist with live prices) to LLM
+- [x] **CHAT-02**: LLM response uses structured output schema: `{message, trades[], watchlist_changes[]}`
+- [x] **CHAT-03**: Trades specified in LLM response auto-execute via same validation as manual trades
+- [x] **CHAT-04**: Watchlist changes in LLM response auto-apply (add/remove)
+- [x] **CHAT-05**: Mock mode returns deterministic canned responses when `OPENAI_API_KEY` is absent or empty
+- [x] **CHAT-06**: `LLM_MOCK=true` forces mock mode even when `OPENAI_API_KEY` is set
+- [x] **CHAT-07**: Last 20 messages loaded as conversation history context for each LLM call
+- [x] **CHAT-08**: Dollar-amount requests ("buy $500 of NVDA") handled by LLM converting to share count using live price in context
 
 ### Background Tasks (SNAP)
 
