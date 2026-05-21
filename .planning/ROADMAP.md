@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Backend Foundation** - FastAPI app wired to market data, SQLite lazy init, health check live *(completed 2026-05-21)*
 - [x] **Phase 2: Portfolio & Watchlist APIs** - Trade execution, watchlist CRUD, and portfolio snapshots over the existing price cache *(completed 2026-05-21)*
-- [ ] **Phase 3: AI Chat** - LiteLLM + GPT-4.1-mini with structured outputs, auto-executing trades, and deterministic mock mode
+- [x] **Phase 3: AI Chat** - LiteLLM + GPT-4.1-mini with structured outputs, auto-executing trades, and deterministic mock mode *(completed 2026-05-21)*
 - [ ] **Phase 4: Frontend Workstation** - Next.js static export delivering the full Bloomberg-style terminal UI against live SSE + REST
 - [ ] **Phase 5: Docker & E2E** - Multi-stage container, start/stop scripts, `.env.example`, Playwright E2E suite
 
@@ -116,6 +116,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Backend Foundation | 3/3 | Complete | 2026-05-21 |
 | 2. Portfolio & Watchlist APIs | 3/3 | Complete | 2026-05-21 |
-| 3. AI Chat | 0/TBD | Not started | - |
-| 4. Frontend Workstation | 0/TBD | Not started | - |
+| 3. AI Chat | 1/1 | Complete | 2026-05-21 |
+| 4. Frontend Workstation | 1/2 | In Progress | - |
 | 5. Docker & E2E | 0/TBD | Not started | - |
