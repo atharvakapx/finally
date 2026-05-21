@@ -8,7 +8,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-from app.db import get_db
+from app.db import get_db, DEFAULT_USER_ID
 from app.market import PriceCache
 from app.services.portfolio import build_portfolio_view, execute_trade
 from app.services.snapshots import record_snapshot
@@ -70,7 +70,8 @@ def create_portfolio_router(price_cache: PriceCache) -> APIRouter:
         with get_db() as conn:
             rows = conn.execute(
                 "SELECT total_value, recorded_at FROM portfolio_snapshots "
-                "WHERE user_id='default' ORDER BY recorded_at ASC"
+                "WHERE user_id=? ORDER BY recorded_at ASC",
+                (DEFAULT_USER_ID,)
             ).fetchall()
         return JSONResponse(
             [{"total_value": r["total_value"], "recorded_at": r["recorded_at"]} for r in rows],

@@ -40,7 +40,13 @@ def create_watchlist_router(price_cache: PriceCache) -> APIRouter:
         Async handler: awaits add_ticker_to_watchlist which awaits market_source.add_ticker.
         Body parsed via request.json() (works in async handlers).
         """
-        body = await request.json()
+        try:
+            body = await request.json()
+        except Exception:
+            return JSONResponse(
+                {"error": "invalid_ticker", "message": "Request body must be valid JSON"},
+                status_code=400,
+            )
         ticker = (body.get("ticker") or "")
         result = await add_ticker_to_watchlist(ticker, request.app.state.market_source)
         if isinstance(result, tuple):

@@ -7,7 +7,7 @@ import logging
 import uuid
 from threading import Lock
 
-from app.db import get_db, _now_iso
+from app.db import get_db, _now_iso, DEFAULT_USER_ID
 from app.market import PriceCache
 
 logger = logging.getLogger(__name__)
@@ -55,7 +55,8 @@ def record_snapshot(price_cache: PriceCache) -> None:
     """
     with get_db() as conn:
         cash_row = conn.execute(
-            "SELECT cash_balance FROM users_profile WHERE id='default'"
+            "SELECT cash_balance FROM users_profile WHERE id=?",
+            (DEFAULT_USER_ID,),
         ).fetchone()
         if cash_row is None:
             logger.warning("record_snapshot: no user profile found, skipping")
@@ -64,7 +65,8 @@ def record_snapshot(price_cache: PriceCache) -> None:
 
         rows = conn.execute(
             "SELECT ticker, quantity FROM positions "
-            "WHERE user_id='default' AND quantity > 0"
+            "WHERE user_id=? AND quantity > 0",
+            (DEFAULT_USER_ID,),
         ).fetchall()
 
     total = cash
@@ -77,7 +79,7 @@ def record_snapshot(price_cache: PriceCache) -> None:
         conn.execute(
             "INSERT INTO portfolio_snapshots (id, user_id, total_value, recorded_at) "
             "VALUES (?, ?, ?, ?)",
-            (str(uuid.uuid4()), "default", total, _now_iso()),
+            (str(uuid.uuid4()), DEFAULT_USER_ID, total, _now_iso()),
         )
 
     logger.debug("Snapshot recorded: total_value=%.2f", total)
