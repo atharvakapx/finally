@@ -84,7 +84,7 @@
 - [x] **INFRA-05**: `scripts/stop_mac.sh` stops and removes container without deleting volume
 - [x] **INFRA-06**: `scripts/start_windows.ps1` and `scripts/stop_windows.ps1` are PowerShell equivalents of the Mac scripts
 - [x] **INFRA-07**: `.env.example` committed with all keys documented but values empty
-- [ ] **INFRA-08**: E2E Playwright tests in `test/` cover: fresh start, add/remove ticker, buy shares, sell shares, portfolio viz, AI chat (mocked), SSE reconnection
+- [x] **INFRA-08**: E2E Playwright tests in `test/` cover: fresh start, add/remove ticker, buy shares, sell shares, portfolio viz, AI chat (mocked), SSE reconnection
 - [x] **INFRA-09**: `db/` directory has `.gitkeep`; `db/finally.db` is gitignored
 
 ## v2 Requirements
@@ -181,7 +181,7 @@
 | INFRA-05 | Phase 5 Plan 01 | Complete |
 | INFRA-06 | Phase 5 Plan 01 | Complete |
 | INFRA-07 | Phase 5 Plan 01 | Complete |
-| INFRA-08 | Phase 5 Plan 02 | Pending |
+| INFRA-08 | Phase 5 Plan 02 | Complete |
 | INFRA-09 | Phase 5 Plan 01 | Complete |
 
 **Coverage:**

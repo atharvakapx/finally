@@ -118,4 +118,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Portfolio & Watchlist APIs | 3/3 | Complete | 2026-05-21 |
 | 3. AI Chat | 1/1 | Complete | 2026-05-21 |
 | 4. Frontend Workstation | 2/2 | Complete | 2026-05-21 |
-| 5. Docker & E2E | 1/TBD | In progress | - |
+| 5. Docker & E2E | 2/2 | In progress | - |
