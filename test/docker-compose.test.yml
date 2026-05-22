@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  app:
+    image: finally
+    ports: ['8000:8000']
+    volumes: ['../db:/app/db']
+    environment:
+      - LLM_MOCK=true
+      - OPENAI_API_KEY=
+      - MASSIVE_API_KEY=
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8000/api/health']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.40.0-jammy
+    working_dir: /test
+    volumes: ['./:/test']
+    depends_on:
+      app:
+        condition: service_healthy
+    command: npx playwright test
+    network_mode: 'service:app'
